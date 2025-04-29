@@ -6,5 +6,10 @@
 </head>
 <body>
     <h1>Prueba Python Whatsapp y Google Sheet</h1>
+    <ul>
+        {% for registro in registros%}
+        <li>{{ registro.fecha_y_hora }} - {{ registro.texto}} </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
