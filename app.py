@@ -19,6 +19,7 @@ db = SQLAlchemy(app)
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fecha_y_hora = db.Column(db.DateTime, default = datetime.utcnow)
+    telefono = db.Column(db.TEXT)
     texto = db.Column(db.TEXT)
 
 #Crear tabla si no existe
@@ -43,11 +44,11 @@ def index():
 mensajes_log = []
 
 #Agregar informacion a la base de datos
-def agregar_mensajes_log(texto):
-    mensajes_log.append(texto)
+def agregar_mensajes_log(texto,numero):
+    mensajes_log.append(texto,numero)
 
     #guardar mensajes en la de datos
-    nuevo_registro = Log(texto = texto)
+    nuevo_registro = Log(texto = texto, telefono=numero)
     db.session.add(nuevo_registro)
     db.session.commit()
 #________________________________________________________________________________________________________
@@ -102,8 +103,8 @@ def recibir_mensajes(req):
                     text = messages["text"]["body"]
                     numero = messages["from"]
 
-                    agregar_mensajes_log(json.dumps(text,numero))
-                    #agregar_mensajes_log(json.dumps(numero))
+                    agregar_mensajes_log(json.dumps(text))
+                    agregar_mensajes_log(json.dumps(numero))
 
         return jsonify({'message': 'EVENT_RECEIVED'})
     except Exception as e:

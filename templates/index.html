@@ -24,12 +24,14 @@
     <table>
         <tr>
             <th>Id</th>
+            <th>Telefono</th>
             <th>Mensaje</th>
             <th>Fecha y Hora</th>
         </tr>
         {% for registro in registros%}
         <tr>
             <td>{{ registro.id }}</td>
+            <td>{{ registro.telefono }}</td>
             <td>{{ registro.texto }}</td>
             <td>{{ registro.fecha_y_hora}}</td>
         </tr>
