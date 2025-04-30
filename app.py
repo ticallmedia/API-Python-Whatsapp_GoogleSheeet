@@ -45,7 +45,7 @@ mensajes_log = []
 
 #Agregar informacion a la base de datos
 def agregar_mensajes_log(texto,numero):
-    mensajes_log.append(texto,numero)
+    #mensajes_log.append(texto,numero)
 
     #guardar mensajes en la de datos
     nuevo_registro = Log(texto = texto, telefono=numero)
@@ -103,8 +103,8 @@ def recibir_mensajes(req):
                     text = messages["text"]["body"]
                     numero = messages["from"]
 
-                    agregar_mensajes_log(json.dumps(text))
-                    agregar_mensajes_log(json.dumps(numero))
+                    agregar_mensajes_log(json.dumps(text,numero))
+                    #agregar_mensajes_log(json.dumps(numero))
 
         return jsonify({'message': 'EVENT_RECEIVED'})
     except Exception as e:
