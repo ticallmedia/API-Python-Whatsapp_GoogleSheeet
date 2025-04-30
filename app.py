@@ -25,6 +25,14 @@ class Log(db.Model):
 #Crear tabla si no existe
 with app.app_context():
     db.create_all()
+
+    #prueba1 = Log(texto = 'Mensaje1', telefono='333333')
+    #prueba2 = Log(texto = 'Mensaje2', telefono='4444')
+
+    #db.session.add(prueba1)
+    #db.session.add(prueba2)
+    #db.session.commit()
+
 #________________________________________________________________________________________________________
 #funcion para ordendar los registro por fecha y hora
 
@@ -44,13 +52,24 @@ def index():
 mensajes_log = []
 
 #Agregar informacion a la base de datos
-def agregar_mensajes_log(texto,numero):
+#def agregar_mensajes_log(texto,numero):
     #mensajes_log.append(texto,numero)
 
     #guardar mensajes en la de datos
-    nuevo_registro = Log(texto = texto, telefono=numero)
+#   nuevo_registro = Log(texto = texto, telefono=numero)
+#    db.session.add(nuevo_registro)
+#    db.session.commit()
+
+
+def agregar_mensajes_log(datos_json):
+    datos = json.loads(datos_json)
+    texto = datos["mensaje"]
+    numero = datos["telefono"]
+
+    nuevo_registro = Log(texto=texto, telefono=numero)
     db.session.add(nuevo_registro)
     db.session.commit()
+
 #________________________________________________________________________________________________________
 #creación del TOKEN
 
@@ -103,8 +122,10 @@ def recibir_mensajes(req):
                     text = messages["text"]["body"]
                     numero = messages["from"]
 
-                    agregar_mensajes_log(json.dumps(text,numero))
+                    #agregar_mensajes_log(json.dumps(text,numero))
                     #agregar_mensajes_log(json.dumps(numero))
+                    agregar_mensajes_log(json.dumps({"mensaje": text, "telefono": numero}))
+
 
         return jsonify({'message': 'EVENT_RECEIVED'})
     except Exception as e:
