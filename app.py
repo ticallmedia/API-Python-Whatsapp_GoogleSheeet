@@ -65,13 +65,13 @@ TOKEN_TAM = "TAM_CODE_TEST"
 
 def webhook():
     if request.method == 'GET':
-        challenge == verificar_token(request)
+        challenge = verificar_token(request)
         return challenge
     elif request.method == 'POST':
-        response == recibir_mensajes(request)
-        return response
+        reponse = recibir_mensajes(request)
+        return reponse
     
-def verificar_token(request):
+def verificar_token(req):
     token = req.args.get('hub.verify_token')
     challenge = req.args.get('hub.challenge')
 
