@@ -3,13 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Google Sheet</title>
+    <style>
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 3px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
-    <h1>Prueba Python Whatsapp y Google Sheet</h1>
-    <ul>
+    <h2>Prueba Python Whatsapp y Google Sheet</h2>
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Mensaje</th>
+            <th>Fecha y Hora</th>
+        </tr>
         {% for registro in registros%}
-        <li>{{ registro.fecha_y_hora }} - {{ registro.texto}} </li>
+        <tr>
+            <td>{{ registro.id }}</td>
+            <td>{{ registro.texto }}</td>
+            <td>{{ registro.fecha_y_hora}}</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
 </body>
 </html>
