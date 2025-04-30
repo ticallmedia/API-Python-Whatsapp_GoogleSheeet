@@ -1,8 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import json
+import http.client
 
+#Proyecto: Creacion API Whatsapp, con descarga de archivos en Google Sheet
 #________________________________________________________________________________________________________
 
 app = Flask(__name__)
@@ -54,6 +56,35 @@ def agregar_mensajes_log(texto):
     nuevo_registro = Log(texto = texto)
     db.session.add(nuevo_registro)
     db.session.commit()
+#________________________________________________________________________________________________________
+#creación del TOKEN
+
+TOKEN_TAM = "TAM_CODE_TEST"
+
+@app.route('/webhook', methods = ['GET','POST'])
+
+def webhook():
+    if request.method == 'GET':
+        challenge == verificar_token(request)
+        return challenge
+    elif request.method == 'POST':
+        response == recibir_mensajes(request)
+        return response
+    
+def verificar_token(request):
+    token = req.args.get('hub.verify_token')
+    challenge = req.args.get('hub.challenge')
+
+    if challenge and token == TOKEN_TAM:
+        return challenge
+    else:
+        request jsonify({'error': 'Token Invalido'}),401
+
+def recibir_mensajes(request):
+    req = request.get_json()
+    agregar_mensajes_log(req)
+    return jsonify({'message': 'EVENT_RECEIVED'})
+
 #________________________________________________________________________________________________________
 #Agregar  mensajes de ejemplo
 
