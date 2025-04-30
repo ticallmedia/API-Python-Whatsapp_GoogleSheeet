@@ -24,13 +24,6 @@ class Log(db.Model):
 #Crear tabla si no existe
 with app.app_context():
     db.create_all()
-
-    prueba1 = Log(texto = 'Mensaje de prueba 1')
-    prueba2 = Log(texto = 'Mensaje de prueba 2')
-
-    db.session.add(prueba1)
-    db.session.add(prueba2)
-    db.session.commit()
 #________________________________________________________________________________________________________
 #funcion para ordendar los registro por fecha y hora
 
@@ -43,7 +36,8 @@ def ordenar_fecha_hora(registros):
 def index():
     #obtener todos los registros de la base de  datos
     registros = Log.query.all()
-    return render_template('index.html', registros = registros )
+    registros_ordenados = ordenar_fecha_hora(registros)
+    return render_template('index.html', registros = registros_ordenados)
 
 #agregar información de la base de datos
 mensajes_log = []
