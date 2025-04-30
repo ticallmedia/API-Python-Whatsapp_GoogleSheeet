@@ -73,8 +73,10 @@ def verificar_token(req):
         return challenge
     else:
         return jsonify({'error': 'Token Invalido'}),401
+#________________________________________________________________________________________________________
+#recibir mensajes
 
-def recibir_mensajes(request):
+def recibir_mensajes(req):
     #req = request.get_json()
     #agregar_mensajes_log(req)
     #return jsonify({'message': 'EVENT_RECEIVED'})
