@@ -102,8 +102,8 @@ def recibir_mensajes(req):
                     text = messages["text"]["body"]
                     numero = messages["from"]
 
-                    agregar_mensajes_log(json.dumps(text))
-                    agregar_mensajes_log(json.dumps(numero))
+                    agregar_mensajes_log(json.dumps(text,numero))
+                    #agregar_mensajes_log(json.dumps(numero))
 
         return jsonify({'message': 'EVENT_RECEIVED'})
     except Exception as e:
