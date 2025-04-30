@@ -78,7 +78,7 @@ def verificar_token(request):
     if challenge and token == TOKEN_TAM:
         return challenge
     else:
-        request jsonify({'error': 'Token Invalido'}),401
+        return jsonify({'error': 'Token Invalido'}),401
 
 def recibir_mensajes(request):
     req = request.get_json()
