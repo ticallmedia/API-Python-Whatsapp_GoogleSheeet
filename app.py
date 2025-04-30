@@ -83,10 +83,10 @@ def recibir_mensajes(req):
 
     try:
         req = request.get_json()
-        entry = entry['entry'][0]
+        entry = req['entry'][0]
         changes = entry['changes'][0]
         value = changes['value']
-        objeto_mensaje = value['message']
+        objeto_mensaje = value['messages']
 
         #identificando el tipo de dato
         if objeto_mensaje:
