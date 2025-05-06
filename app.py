@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import json
 import http.client
+from oauth2client.service_account import ServiceAccountCredentials
+import gspread
 
 #Proyecto: Creacion API Whatsapp, con descarga de archivos en Google Sheet
 #________________________________________________________________________________________________________
@@ -19,8 +21,8 @@ db = SQLAlchemy(app)
 class Log(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fecha_y_hora = db.Column(db.DateTime, default = datetime.utcnow)
-    telefono = db.Column(db.TEXT)
-    texto = db.Column(db.TEXT)
+    telefono = db.Column(db.Text)
+    texto = db.Column(db.Text)
 
 #Crear tabla si no existe
 with app.app_context():
@@ -70,6 +72,39 @@ def agregar_mensajes_log(datos_json):
     db.session.add(nuevo_registro)
     db.session.commit()
 
+def exportar_eventos():
+    try:
+        # Obtener eventos desde SQLAlchemy
+        eventos = Log.query.all()
+
+        # Configurar acceso a Google Sheets
+        scope = [
+            "https://spreadsheets.google.com/feeds",
+            "https://www.googleapis.com/auth/drive"
+        ]
+        creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+        client = gspread.authorize(creds)
+
+        # Abrir hoja de cálculo
+        sheet = client.open('LogDeEventos').sheet1
+        sheet.clear()
+
+        # Escribir encabezados
+        sheet.append_row(["ID", "Fecha", "Teléfono", "Texto"])
+
+        # Escribir datos
+        for evento in eventos:
+            sheet.append_row([
+                evento.id,
+                evento.fecha_y_hora.strftime('%Y-%m-%d %H:%M:%S'),
+                evento.telefono,
+                evento.texto
+            ])
+
+        return jsonify({'message': 'Eventos exportados exitosamente a Google Sheets'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 #________________________________________________________________________________________________________
 #creación del TOKEN
 
@@ -125,6 +160,7 @@ def recibir_mensajes(req):
                     #agregar_mensajes_log(json.dumps(text,numero))
                     #agregar_mensajes_log(json.dumps(numero))
                     agregar_mensajes_log(json.dumps({"mensaje": text, "telefono": numero}))
+                    exportar_eventos()
 
 
         return jsonify({'message': 'EVENT_RECEIVED'})
@@ -134,7 +170,7 @@ def recibir_mensajes(req):
 #Agregar  mensajes de ejemplo
 
 #agregar_mensajes_log(json.dumps('Prueba de base de datos test1'))
-
+#________________________________________________________________________________________________________
 
 #________________________________________________________________________________________________________
 
