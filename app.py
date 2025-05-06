@@ -117,6 +117,7 @@ def exportar_eventos():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+#credenciales google en variables de entorno
 def get_google_credentials_from_env():
     creds_dict = {
         "type": os.environ["GOOGLE_TYPE"],
