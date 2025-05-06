@@ -3,8 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import json
 import http.client
+
+import os
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
+from dotenv import load_dotenv
+load_dotenv()
+
 
 #Proyecto: Creacion API Whatsapp, con descarga de archivos en Google Sheet
 #________________________________________________________________________________________________________
@@ -77,12 +82,18 @@ def exportar_eventos():
         # Obtener eventos desde SQLAlchemy
         eventos = Log.query.all()
 
+        creds_dict = get_google_credentials_from_env()
+
         # Configurar acceso a Google Sheets
         scope = [
             "https://spreadsheets.google.com/feeds",
             "https://www.googleapis.com/auth/drive"
         ]
-        creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+
+
+        # Obtener credenciales desde variables de entorno
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+        # Usar con gspread
         client = gspread.authorize(creds)
 
         # Abrir hoja de cálculo
@@ -105,6 +116,23 @@ def exportar_eventos():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+def get_google_credentials_from_env():
+    creds_dict = {
+        "type": os.environ["GOOGLE_TYPE"],
+        "project_id": os.environ["GOOGLE_PROJECT_ID"],
+        "private_key_id": os.environ["GOOGLE_PRIVATE_KEY_ID"],
+        "private_key": os.environ["GOOGLE_PRIVATE_KEY"].replace("\\n", "\n"),
+        "client_email": os.environ["GOOGLE_CLIENT_EMAIL"],
+        "client_id": os.environ["GOOGLE_CLIENT_ID"],
+        "auth_uri": os.environ["GOOGLE_AUTH_URI"],
+        "token_uri": os.environ["GOOGLE_TOKEN_URI"],
+        "auth_provider_x509_cert_url": os.environ["GOOGLE_AUTH_PROVIDER_CERT_URL"],
+        "client_x509_cert_url": os.environ["GOOGLE_CLIENT_CERT_URL"]
+    }
+    return creds_dict
+
+
 #________________________________________________________________________________________________________
 #creación del TOKEN
 
