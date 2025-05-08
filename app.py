@@ -11,7 +11,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-#Proyecto: Creacion API Whatsapp, con descarga de archivos en Google Sheet
+"""
+Proyecto: Creacion API Whatsapp, con descarga de archivos en Google Sheet
+
+Descripción: Al escribir un mensja por Whatsapp, este se guarda en SQL lite
+de RENDER, pero adicionalmente se cargara la ultima fila ingresada en la base
+de datos, y se copiara a Google Sheet
+
+"""
 #________________________________________________________________________________________________________
 
 app = Flask(__name__)
@@ -115,7 +122,8 @@ def exportar_eventos():
             sheet.clear()
             sheet.append_row(["ID", "Fecha", "Teléfono", "Texto"])
 
-        # Escribir datos
+        """
+        # Escribir todos los datos que existen en la tabla
         for evento in eventos:
             sheet.append_row([
                 evento.id,
@@ -123,6 +131,18 @@ def exportar_eventos():
                 evento.telefono,
                 evento.texto
             ])
+        """
+
+        # Asegúrate de que la lista no esté vacía
+        if eventos:
+            ultimo_evento = eventos[-1]
+            sheet.append_row([
+                ultimo_evento.id,
+                ultimo_evento.fecha_y_hora.strftime('%Y-%m-%d %H:%M:%S'),
+                ultimo_evento.telefono,
+                ultimo_evento.texto
+            ])
+
 
         return jsonify({'message': 'Eventos exportados exitosamente a Google Sheets'}), 200
 
