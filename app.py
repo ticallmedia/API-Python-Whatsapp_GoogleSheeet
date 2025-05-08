@@ -102,10 +102,18 @@ def exportar_eventos():
 
         # Acceder al Google Sheet
         sheet = client.open_by_url('https://docs.google.com/spreadsheets/d/1h-BAG21QOSKND3-v8w6j1RM6rVaYr171Fdl1MUODLBw/edit?usp=drive_link').sheet1
-        #sheet.clear()
+        
+        #buscar un texto
+        titulos = []
 
-        # Escribir encabezados
-        sheet.append_row(["ID", "Fecha", "Teléfono", "Texto"])
+        cells = sheet.findall('ID')
+        for i in cells:
+            titulos.append(i.address)
+            
+        if not titulos:    
+            # Escribir encabezados
+            sheet.clear()
+            sheet.append_row(["ID", "Fecha", "Teléfono", "Texto"])
 
         # Escribir datos
         for evento in eventos:
