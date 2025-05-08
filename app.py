@@ -122,6 +122,18 @@ def exportar_eventos():
             sheet.clear()
             sheet.append_row(["ID", "Fecha", "Teléfono", "Texto"])
 
+            #aplicando formato y color al titulo
+            formato = {
+                "backgroundColor": {
+                    "red": 0.0,
+                    "green": 1.0,
+                    "blue": 0.0,
+                },
+                "textFormat" : {"bold": True}
+
+            }
+            sheet.format("A1:D1", formato)
+
         """
         # Escribir todos los datos que existen en la tabla
         for evento in eventos:
