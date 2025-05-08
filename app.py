@@ -87,18 +87,22 @@ def exportar_eventos():
         # Configurar acceso a Google Sheets
         scope = [
             "https://spreadsheets.google.com/feeds",
-            "https://www.googleapis.com/auth/drive"
-        ]
+            "https://www.googleapis.com/auth/drive",
+        ]   
 
-
+        # Convertir el diccionario a un objeto tipo archivo usando json.dumps + StringIO
+        from io import StringIO
+        json_creds = json.dumps(creds_dict)
+        
         # Obtener credenciales desde variables de entorno
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-        # Usar con gspread
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(json.loads(json_creds), scope)
+
+        # Autenticar con gspread
         client = gspread.authorize(creds)
 
-        # Abrir hoja de cálculo
-        sheet = client.open('LogDeEventos').sheet1
-        sheet.clear()
+        # Acceder al Google Sheet
+        sheet = client.open_by_url('https://docs.google.com/spreadsheets/d/1h-BAG21QOSKND3-v8w6j1RM6rVaYr171Fdl1MUODLBw/edit?usp=drive_link').sheet1
+        #sheet.clear()
 
         # Escribir encabezados
         sheet.append_row(["ID", "Fecha", "Teléfono", "Texto"])
