@@ -18,6 +18,8 @@ Descripción: Al escribir un mensja por Whatsapp, este se guarda en SQL lite
 de RENDER, pero adicionalmente se cargara la ultima fila ingresada en la base
 de datos, y se copiara a Google Sheet
 
+#https://docs.google.com/spreadsheets/d/1h-BAG21QOSKND3-v8w6j1RM6rVaYr171Fdl1MUODLBw/edit?gid=0#gid=0
+
 """
 #________________________________________________________________________________________________________
 
